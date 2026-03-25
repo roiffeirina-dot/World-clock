@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>World Clock</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #12082a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .widget {
+      background: #16093a;
+      border-radius: 20px;
+      padding: 36px 40px 38px;
+    }
+
+    .clocks {
+      display: flex;
+      gap: 14px;
+    }
+
+    .clock-card {
+      background: #1e1040;
+      border: 1.5px solid #5b21b6;
+      border-radius: 14px;
+      padding: 22px 28px 20px;
+      width: 185px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 0 18px rgba(109, 40, 217, 0.18);
+    }
+
+    .clock-card.active {
+      border-color: #7c3aed;
+      box-shadow: 0 0 28px rgba(124, 58, 237, 0.4);
+    }
+
+    .city-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .flag {
+      width: 22px;
+      height: 16px;
+      border-radius: 2px;
+      object-fit: cover;
+      display: block;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.12);
+    }
+
+    .city-label {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.15;
+    }
+
+    .country-code {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: #7c3aed;
+      text-transform: lowercase;
+    }
+
+    .city-name {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      color: #e2d9f3;
+      text-transform: uppercase;
+    }
+
+    .time {
+      font-family: 'DM Mono', monospace;
+      font-size: 27px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: 0.01em;
+      line-height: 1;
+    }
+
+    .date {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 300;
+      color: #9ca3af;
+      letter-spacing: 0.03em;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <div class="clocks">
+
+      <div class="clock-card">
+        <div class="city-header">
+          <img class="flag" src="https://flagcdn.com/w40/de.png" alt="DE"/>
+          <div class="city-label">
+            <span class="country-code">de</span>
+            <span class="city-name">Berlin</span>
+          </div>
+        </div>
+        <div class="time" id="time-berlin">--:--:--</div>
+        <div class="date" id="date-berlin">---</div>
+      </div>
+
+      <div class="clock-card active">
+        <div class="city-header">
+          <img class="flag" src="https://flagcdn.com/w40/il.png" alt="IL"/>
+          <div class="city-label">
+            <span class="country-code">il</span>
+            <span class="city-name">Netanya</span>
+          </div>
+        </div>
+        <div class="time" id="time-netanya">--:--:--</div>
+        <div class="date" id="date-netanya">---</div>
+      </div>
+
+      <div class="clock-card">
+        <div class="city-header">
+          <img class="flag" src="https://flagcdn.com/w40/br.png" alt="BR"/>
+          <div class="city-label">
+            <span class="country-code">br</span>
+            <span class="city-name">Rio de Janeiro</span>
+          </div>
+        </div>
+        <div class="time" id="time-rio">--:--:--</div>
+        <div class="date" id="date-rio">---</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const zones = [
+      { id: 'berlin',  tz: 'Europe/Berlin' },
+      { id: 'netanya', tz: 'Asia/Jerusalem' },
+      { id: 'rio',     tz: 'America/Sao_Paulo' },
+    ];
+
+    function update() {
+      zones.forEach(({ id, tz }) => {
+        const now = new Date();
+        const t = new Intl.DateTimeFormat('en-GB', {
+          timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+        }).format(now);
+        const d = new Intl.DateTimeFormat('en-GB', {
+          timeZone: tz, weekday: 'short', day: '2-digit', month: 'short'
+        }).format(now);
+        document.getElementById('time-' + id).textContent = t;
+        document.getElementById('date-' + id).textContent = d;
+      });
+    }
+
+    update();
+    setInterval(update, 1000);
+  </script>
+</body>
+</html>
